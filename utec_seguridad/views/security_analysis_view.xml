@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!--Pivot View-->
+        <record id="security_analysis_pivot" model="ir.ui.view">
+            <field name="name">security.analysis.pivot</field>
+            <field name="model">security.analysis</field>
+            <field name="arch" type="xml">
+                <graph string="pivot" type="pivot">
+                    <field name="login" type="col"/>
+                    <field name="role" type="row"/>
+                    <field name="qty_user" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        <!--action view-->
+        <record id="action_security_analysis_report_all" model="ir.actions.act_window">
+            <field name="name">Security Analysis</field>
+            <field name="res_model">security.analysis</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph,pivot,form</field>
+            <field name="view_id" ref="security_analysis_pivot"/>
+            <field name="help">This report was made to perform an analysis of user numbers by roles, profiles and groups
+            </field>
+        </record>
+        <!-- Menu Items -->
+        <menuitem id="base.menu_security_dashboard" name="Security" parent="base.menu_reporting" sequence="0"/>
+        <menuitem name="Security Analysis" action="action_security_analysis_report_all" id="menu_security_analysis"
+                  parent="base.menu_security_dashboard" sequence="10"/>
+    </data>
+</openerp>

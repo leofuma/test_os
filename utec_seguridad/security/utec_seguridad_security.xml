@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="group_security_analysis" model="res.groups">
+            <field name="name">Check security reports</field>
+            <field name="description">Check security reports</field>
+            <field name="comment">Group for Check security reports</field>
+            <field name="category_id">28</field>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+            <field name="implied_ids" eval="[(4, ref('share.group_share_user'))]"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_hr_user'))]"/>
+
+        </record>
+        <record model='ir.ui.menu' id='base.menu_reporting_dashboard'>
+            <field name="groups_id" eval="[(4,ref('utec_seguridad.group_security_analysis'))]"/>
+        </record>
+
+        <record model='ir.ui.menu' id='base.menu_security_dashboard'>
+            <field name="groups_id" eval="[(4,ref('utec_seguridad.group_security_analysis'))]"/>
+        </record>
+
+        <record model='ir.ui.menu' id='utec_seguridad.menu_security_analysis'>
+            <field name="groups_id" eval="[(4,ref('utec_seguridad.group_security_analysis'))]"/>
+        </record>
+        <record model='ir.ui.view' id='utec_seguridad.security_analysis_pivot'>
+            <field name="groups_id" eval="[(4,ref('utec_seguridad.group_security_analysis'))]"/>
+        </record>
+    </data>
+</openerp>

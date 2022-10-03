@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <record id="view_security_profile_form" model="ir.ui.view">
+        <field name="name">security.profile.form</field>
+        <field name="model">security.profile</field>
+        <field name="arch" type="xml">
+            <form string="Perfil de seguridad">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="create_date" />
+                        <field name="group_category_ids" widget="many2many_tags"/>
+                        <field name="description" class="text_high"/>
+                    </group>
+                    <notebook>
+                        <page string="Roles">
+                            <field name="role_ids" nolabel="1" options="{'no_create': 1, 'create': 0, 'create_edit': 0}"/>
+                        </page>
+                        <page string="Grupos">
+                            <field name="group_ids" nolabel="1"/>
+                        </page>
+                        <page string="Cargos">
+                            <field name="profile_job_ids" nolabel="1">
+                                <tree string="Cargos" editable="top">
+                                    <field name="job_id" context="{'filter_profile': 0, 'dep_id': department_id}" options="{'no_create': 1, 'no_quick_create': 1, 'create': 0, 'create_edit': 0}"/>
+                                    <field name="department_id" context="{'filter_profile': 0, 'job_id': job_id}" options="{'no_create': 1, 'no_quick_create': 1, 'create': 0, 'create_edit': 0}"/>
+                                </tree>
+                                <form string="Cargo">
+                                    <group>
+                                        <field name="job_id" />
+                                        <field name="department_id" />
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Usuarios">
+                            <field name="user_ids" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_security_profile_tree" model="ir.ui.view">
+        <field name="name">security.profile.tree</field>
+        <field name="model">security.profile</field>
+        <field name="arch" type="xml">
+            <tree string="Perfiles de seguridad">
+                <field name="name"/>
+                <field name="role_ids" widget="many2many_tags"/>
+                <field name="description" />
+                <field name="create_date" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_security_profile_search" model="ir.ui.view">
+        <field name="name">security.profile.search</field>
+        <field name="model">security.profile</field>
+        <field name="arch" type="xml">
+            <search string="Perfiles de seguridad">
+                <field name="name" filter_domain="['|', ('name','ilike',self), ('description','ilike',self)]" string="Perfil"/>
+                <field name="role_ids" />
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_security_profile">
+        <field name="name">Perfiles</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">security.profile</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_security_profile" parent="base.menu_users" action="action_security_profile" sequence="3"/>
+
+</data>
+</openerp>

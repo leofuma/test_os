@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_groups_tree" model="ir.ui.view">
+            <field name="name">res.groups.tree</field>
+            <field name="model">res.groups</field>
+            <field name="arch" type="xml">
+                <tree string="Grupos">
+                    <field name="full_name"/>
+                    <field name="category_id"/>
+                    <field name="description"/>
+                    <field name="role_ids" widget="many2many_tags"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_groups_form" model="ir.ui.view">
+            <field name="name">res.groups.form</field>
+            <field name="model">res.groups</field>
+            <field name="inherit_id" ref="base.view_groups_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/group[1]" position="inside">
+                    <field name="description" class="text_high"/>
+                </xpath>
+                <xpath expr="//notebook/page[1]" position="after">
+                    <page string="Roles">
+                        <field name="role_ids">
+                            <tree string="Roles">
+                                <field name="name" />
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_groups_search" model="ir.ui.view">
+            <field name="name">res.groups.search</field>
+            <field name="model">res.groups</field>
+            <field name="inherit_id" ref="base.view_groups_search"/>
+            <field name="arch" type="xml">
+                <field name="name" position="attributes">
+                    <attribute name="filter_domain">['|', '|', ('name','ilike',self), ('category_id','ilike',self), ('description','ilike',self)]</attribute>
+                </field>
+                <field name="name" position="after">
+                    <field name="role_ids" />
+                </field>
+            </field>
+        </record>
+
+        <record id="base.action_res_groups" model="ir.actions.act_window">
+            <field name="domain">[('is_role','=',False)]</field>
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="base.menu_action_res_users" model="ir.ui.menu">
+            <field name="sequence" eval="1"/>
+        </record>
+
+        <record id="view_users_form" model="ir.ui.view">
+            <field name="name">res.users.form</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="before">
+                    <field name="groups_readonly" invisible="1"/>
+                    <field name="job_id" attrs="{'invisible': [('id', '=', 1)]}" context="{'filter_by_employee': 1, 'user_id': id}"
+                           options="{'no_create': 1, 'no_quick_create': 1, 'create': 0, 'create_edit': 0}" />
+                </field>
+                <xpath expr="//notebook/page[1]" position="attributes">
+                    <attribute name="string">Grupos</attribute>
+                </xpath>
+                <xpath expr="//div[@class='oe_title']" position="attributes">
+                    <attribute name="style">width: 520px;</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_res_users_form_inherit" model="ir.ui.view">
+            <field name="name">res.users.form.inherit</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base_user_role.view_res_users_form_inherit"/>
+            <field name="arch" type="xml">
+                <data>
+                    <page name="roles" position="before">
+                        <page name="user_profiles" string="Perfiles">
+                            <field name="user_profile_ids" nolabel="1" attrs="{'readonly': [('id', '=', 1)]}">
+                                <tree editable="bottom" colors="grey: not is_enabled;">
+                                    <field name="profile_id" options="{'no_create': 1, 'no_quick_create': 1, 'create': 0, 'create_edit': 0}"/>
+                                    <field name="date_from"/>
+                                    <field name="date_to"/>
+                                    <field name="is_enabled"/>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <field name="profile_id" />
+                                        <field name="date_from"/>
+                                        <field name="date_to"/>
+                                        <field name="is_enabled"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                    </page>
+                    <field name="role_line_ids" position="attributes">
+                        <attribute name="readonly">1</attribute>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+    </data>
+</openerp>
