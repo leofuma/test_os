@@ -9,7 +9,7 @@
             <form string="Perfil de seguridad">
                 <sheet>
                     <group>
-                        <field name="name"/>
+                        <field name="name" force_save="1"/>
                         <field name="create_date" />
                         <field name="group_category_ids" widget="many2many_tags"/>
                         <field name="description" class="text_high"/>

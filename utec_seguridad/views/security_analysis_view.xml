@@ -18,7 +18,7 @@
             <field name="name">Security Analysis</field>
             <field name="res_model">security.analysis</field>
             <field name="view_type">form</field>
-            <field name="view_mode">graph,pivot,form</field>
+            <field name="view_mode">graph,form</field>
             <field name="view_id" ref="security_analysis_pivot"/>
             <field name="help">This report was made to perform an analysis of user numbers by roles, profiles and groups
             </field>

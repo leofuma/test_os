@@ -7,11 +7,10 @@ class SecurityProfile(models.Model):
     _name = "security.profile"
     _description = "Perfil de seguridad"
     _order = 'create_date desc, id desc'
-    _rec_name = 'profile_id'
+    _rec_name = 'name'
 
 
-    profile_id = fields.Integer('profile id')
-    name = fields.Char("Nombre", required=True)
+    name = fields.Char("Nombre")
     create_date = fields.Datetime(u'Fecha de creación', readonly=True)
     role_ids = fields.Many2many("res.users.role", "security_profile_user_role_rel",
                                 'profile_id', 'role_id', string="Roles")
@@ -20,6 +19,12 @@ class SecurityProfile(models.Model):
     group_category_ids = fields.Many2many('ir.module.category', string='Aplicaciones', compute="_compute_group_info")
     profile_job_ids = fields.One2many('security.profile.job', 'profile_id', string="Cargos")
     description = fields.Text(u'Descripción')
+
+
+    @api.onchange('description')
+    def _compute_name(self):
+        for profile in self:
+            profile.name = 'PROFILE - ' + str(self.env['security.profile'].sudo().search([], limit=1, order='id desc').id + 1)
 
     @api.depends('role_ids', 'role_ids.implied_ids')
     def _compute_group_info(self):

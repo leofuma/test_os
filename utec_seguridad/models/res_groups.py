@@ -5,9 +5,8 @@ from openerp import models, fields, api, tools
 
 class Groups(models.Model):
     _inherit = 'res.groups'
-    _rec_name = 'group_id'
+    _rec_name = 'id'
 
-    group_id = fields.Integer('Group Id')
     description = fields.Text(u'Descripción', required=True)
     user_roles = fields.One2many('res.users.role', 'group_id', string=u"Rol asociado")
     is_role = fields.Boolean('Grupo de Rol', compute="_compute_is_role", store=True)

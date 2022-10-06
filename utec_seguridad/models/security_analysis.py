@@ -17,7 +17,7 @@ class SecurityAnalysis(models.Model):
     # records to be displayed in the view (dimensions)
     login = fields.Char(u'login', readonly=True)
     profile = fields.Char(u'Profile', readonly=True)
-    group = fields.Char(u'Group', readonly=True)
+    group = fields.Many2one('res.groups', u'Group', readonly=True)
     role = fields.Char(u'Role', readonly=True)
 
     # records to be displayed in the view (measures)

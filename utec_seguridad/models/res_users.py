@@ -8,13 +8,12 @@ from lxml import etree
 
 class Users(models.Model):
     _inherit = 'res.users'
-    _rec_name = 'user_id'
+    _rec_name = 'id'
 
-    uuser_id = fields.Char(string='User Id', required=True, copy=False, readonly=True,
-                   index=True, default='New')
     job_id = fields.Many2one('hr.job', 'Cargo')
     user_profile_ids = fields.One2many('res.users.security.profile', 'user_id', string="Perfiles")
     groups_readonly = fields.Boolean(compute="_compute_groups_readonly", hide=True)
+
 
     def __init__(self, pool, cr):
         cr.execute("SELECT column_name FROM information_schema.columns WHERE table_name='res_users' and column_name='job_id'")
@@ -53,11 +52,10 @@ class Users(models.Model):
 
     @api.model
     def create(self, vals):
-        cr, uid = None, None
-        obj_seq = self.pool.get('ir.sequence')
-        if vals.get('uuser_id', 'New') == 'New':
-            f = obj_seq.next_by_code(cr, uid, 'user_seq_id', None)
-            vals['uuser_id'] = f
+        obj_seq = self.env['ir.sequence']
+        if vals.get('user_id', 'New') == 'New':
+            f = obj_seq.next_by_code('res_users_id_seq')
+            vals['user_id'] = f
         record = super(Users, self).create(vals)
         record.sudo().set_role_lines_from_profiles()
         return record

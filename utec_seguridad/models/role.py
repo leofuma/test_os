@@ -5,9 +5,6 @@ from openerp import api, models, fields
 
 class ResUsersRole(models.Model):
     _inherit = 'res.users.role'
-    _rec_name = 'rol_id'
-
-    rol_id = fields.Integer('Rol id')
 
     @api.model
     def create(self, vals):
@@ -15,6 +12,7 @@ class ResUsersRole(models.Model):
         if not self._context.get('avoid_clear_caches', False):
             self.env['res.groups'].clear_caches()
         return record
+
 
     @api.multi
     def write(self, vals):
