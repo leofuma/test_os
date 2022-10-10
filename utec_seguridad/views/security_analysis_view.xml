@@ -2,14 +2,27 @@
 <openerp>
     <data>
         <!--Pivot View-->
+        <record id="security_analysis_tree" model="ir.ui.view">
+            <field name="name">security.analysis.tree</field>
+            <field name="model">security.analysis</field>
+            <field name="arch" type="xml">
+                <tree string="pivot">
+                    <field name="user_id"/>
+                    <field name="profile_id"/>
+                    <field name="role_id"/>
+                    <field name="group_id"/>
+                </tree>
+            </field>
+        </record>
+        <!--Pivot View-->
         <record id="security_analysis_pivot" model="ir.ui.view">
             <field name="name">security.analysis.pivot</field>
             <field name="model">security.analysis</field>
             <field name="arch" type="xml">
                 <graph string="pivot" type="pivot">
-                    <field name="login" type="col"/>
-                    <field name="role" type="row"/>
-                    <field name="qty_user" type="measure"/>
+                    <field name="group_id" type="col"/>
+                    <field name="profile_id" type="row"/>
+                    <field name="user_id" string="uxg" type="measure"/>
                 </graph>
             </field>
         </record>
@@ -18,7 +31,7 @@
             <field name="name">Security Analysis</field>
             <field name="res_model">security.analysis</field>
             <field name="view_type">form</field>
-            <field name="view_mode">graph,form</field>
+            <field name="view_mode">graph,tree</field>
             <field name="view_id" ref="security_analysis_pivot"/>
             <field name="help">This report was made to perform an analysis of user numbers by roles, profiles and groups
             </field>

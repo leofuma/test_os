@@ -13,17 +13,17 @@
 
         <record model='ir.ui.menu' id='base.menu_reporting_dashboard'>
             <field name="groups_id" eval="[(4,ref('utec_seguridad.group_security_analysis'))]"/>
-            <field name="name">menu_reporting_dashboard - group_security_analysis</field>
+            <field name="name">Reporting/Security Analysis</field>
         </record>
 
         <record model='ir.ui.menu' id='base.menu_security_dashboard'>
             <field name="groups_id" eval="[(4,ref('utec_seguridad.group_security_analysis'))]"/>
-            <field name="name">menu_security_dashboard - group_security_analysis</field>
+            <field name="name">Reporting/Security Analysis</field>
         </record>
 
         <record model='ir.ui.menu' id='utec_seguridad.menu_security_analysis'>
             <field name="groups_id" eval="[(4,ref('utec_seguridad.group_security_analysis'))]"/>
-            <field name="name">menu_security_analysis - group_security_analysis</field>
+            <field name="name">Reporting/Security Analysis</field>
         </record>
 
 <!--        <record model='ir.ui.view' id='utec_seguridad.security_analysis_pivot'>-->

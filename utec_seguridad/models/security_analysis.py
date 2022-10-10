@@ -3,45 +3,46 @@
 
 ######   Pivot View   #######
 
-from openerp import tools
-from openerp import api, fields, models
+from openerp import api, fields, models, tools
 
 # security analysis view class for the pivot view
 class SecurityAnalysis(models.Model):
     _name = "security.analysis"
     _description = "Security Analysis"
     _auto = False # Order that execute this code
-    _rec_name = 'login'
-    _order = 'login desc'
+    _rec_name = 'user_id'
+    _order = 'user_id desc'
 
     # records to be displayed in the view (dimensions)
-    login = fields.Char(u'login', readonly=True)
-    profile = fields.Char(u'Profile', readonly=True)
-    group = fields.Many2one('res.groups', u'Group', readonly=True)
-    role = fields.Char(u'Role', readonly=True)
+    # login = fields.Char(u'login', readonly=True)
+    profile_id = fields.Many2one('security.profile','Profile', readonly=True)
+    group_id = fields.Many2one('res.groups', 'Group', readonly=True)
+    user_id = fields.Many2one('res.users','User', readonly=True)
+    role_id = fields.Many2one('res.users.role','Role', readonly=True)
 
-    # records to be displayed in the view (measures)
-    qty_user = fields.Integer('Qty user')
 
-    # view selection
+   # view selection
     def _select(self):
         select_str = """
-              select row_number() over(order by r.id) as id,
-                     login as login,
-                     sp.name as profile,
-                     rur.group_id as group,
-                     rur.description as role
-        """
+        select 
+            row_number() over(order by u.id) as id,
+            u.id as user_id,
+            up.profile_id as profile_id,
+            case g.is_role
+                when 't' then gu.gid
+                end
+            as role_id,
+            gu.gid as group_id
+            """
         return select_str
 
     # view relations
     def _from(self):
         from_str = """
-                res_users r 
-                   join res_users_security_profile rup on rup.user_id = r.id 
-                   left join security_profile sp on rup.profile_id = sp.id 
-                   left join security_profile_user_role_rel spu on sp.id = spu.profile_id 
-                   left join res_users_role rur on spu.role_id = rur.id 
+            res_users as u
+            left join res_users_security_profile as up on up.user_id = u.id
+            left join res_groups_users_rel as gu on gu.uid = u.id
+            left join res_groups as g on g.id = gu.gid;
         """
         return from_str
 
@@ -52,8 +53,6 @@ class SecurityAnalysis(models.Model):
 
     # view creation
     def init(self, cr):
-        # asigned name from view
-        self._table = "security_analysis_view"
         # check exist
         tools.drop_view_if_exists(cr, self._table)
         # building view
@@ -61,4 +60,20 @@ class SecurityAnalysis(models.Model):
             %s
             FROM %s
             %s
+            ;
             """ % (self._table, self._select(), self._from(), self._group_by()))
+
+    @api.model
+    def read_group(self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True):
+        """
+            Inherit read_group to calculate the sum of the non-stored fields, as it is not automatically done anymore through the XML.
+        """
+        res = super(SecurityAnalysis, self).read_group(domain, fields, groupby, offset=offset, limit=limit, orderby=orderby, lazy=lazy)
+        if "user_id" in fields:
+            for re in res:
+                if re.get('__domain'):
+                    sa = self.search(re['__domain'])
+                    users = sa.mapped("user_id")
+                    print('DDDDD', users)
+                    re["user_id"] = (str(len(users)), str(len(users)))
+        return res

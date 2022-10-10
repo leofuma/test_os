@@ -8,7 +8,6 @@ from lxml import etree
 
 class Users(models.Model):
     _inherit = 'res.users'
-    _rec_name = 'id'
 
     job_id = fields.Many2one('hr.job', 'Cargo')
     user_profile_ids = fields.One2many('res.users.security.profile', 'user_id', string="Perfiles")
